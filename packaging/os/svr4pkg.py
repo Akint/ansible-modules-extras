@@ -193,7 +193,9 @@ def main():
         if src is None:
             module.fail_json(name=name,
                              msg="src is required when state=present")
-        if not package_installed(module, name, category):
+        if package_installed(module, name, category):
+            module.exit_json(changed=False)
+        else:
             if module.check_mode:
                 module.exit_json(changed=True)
             (rc, out, err) = package_install(module, name, src, proxy, response_file, zone, category)
